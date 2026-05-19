@@ -1,0 +1,185 @@
+---
+title: Lab08
+author: "Niam Shasha (A17805610)"
+format: pdf
+toc: true
+---
+
+##Background
+
+The goal of this mini-project is for you to explore a complete analysis using the unsupervised learning techniques covered in class. 
+
+Today we will analyze a biopsyy data set describe characteristics of the cell nuclei present in digitized images of a fine needle aspiration (FNA) of a breast mass.
+
+##DATA IMPORT
+
+```{r}
+wisc.df <- read.csv("WisconsinCancer.csv", row.names =1)
+```
+
+```{r}
+head(wisc.df,3)
+```
+
+
+Make sure we remove or exclude the diagnosis column from the data-set that we use for further analysis
+
+```{r}
+wisc.data <-  wisc.df[,-1]
+diagnosis <- as.factor(wisc.df$diagnosis)
+```
+
+
+>Q1. How many observations are in this dataset?
+
+```{r}
+nrow(wisc.data)
+```
+569 observations
+
+>Q2. How many of the observations have a malignant diagnosis?
+
+```{r}
+table(wisc.df$diagnosis)
+```
+212 are malignant 
+
+>Q3. How many variables/features in the data are suffixed with `_mean`?
+
+```{r}
+colnames(wisc.data)
+```
+
+```{r}
+length( grep("_mean", colnames(wisc.data), value=T))
+```
+10 are suffixed with mean. 
+
+##Principal Component Analysis
+
+We need to scale our data before PCA with the `scale=TRUE` ARGUMENT TO `PRCOMP()`. 
+
+```{r}
+wisc.pr <- prcomp(wisc.data, scale=TRUE)
+summary(wisc.pr)
+```
+
+
+```{r}
+colMeans(wisc.data)
+
+apply(wisc.data,2,sd)
+```
+
+
+
+>Q4. From your results, what proportion of the original variance is captured by the first principal component (PC1)?
+
+>Q5. How many principal components (PCs) are required to describe at least 70% of the original variance in the data?
+
+>Q6. How many principal components (PCs) are required to describe at least 90% of the original variance in the data?
+
+
+```{r}
+biplot(wisc.pr)
+```
+
+
+>Q7. What stands out to you about this plot? Is it easy or difficult to understand? Why?
+
+It is very difficult to understand the PCA model as there is many overlap and clustering and it  is not clear on what the graph is depicting.
+
+
+```{r}
+library(ggplot2)
+
+ggplot(wisc.pr$x)+
+  aes(PC1,PC2, col=diagnosis)+
+  geom_point()
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(wisc.pr$x)+
+  aes(PC1,PC3, col=diagnosis)+
+  geom_point()
+```
+
+I notice that the points are dependent on PC1 and that is what causes the division between malignant and benign. The seperation is on the PC1 axis. 
+
+```{r}
+pr.var <- wisc.pr$sdev^2
+head(pr.var)
+```
+
+
+```{r}
+pve <- pr.var / sum(pr.var)
+pve
+
+plot(c(1,pve), xlab = "Principal Component", 
+     ylab = "Proportion of Variance Explained", 
+     ylim = c(0, 1), type = "o")
+```
+
+```{r}
+barplot(pve, ylab = "Percent of Variance Explained",
+     names.arg=paste0("PC",1:length(pve)), las=2, axes = FALSE)
+axis(2, at=pve, labels=round(pve,2)*100 )
+```
+
+>Q9. For the first principal component, what is the component of the loading vector (i.e. wisc.pr$rotation[,1]) for the feature concave.points_mean? This tells us how much this original feature contributes to the first PC. Are there any features with larger contributions than this one?
+
+
+
+##Hierachical Clustering
+
+>Q10.  Using the plot() and abline() functions, what is the height at which the clustering model has 4 clusters?
+
+
+```{r}
+wisc.hclust <- hclust( dist( scale(wisc.data) ) )
+plot(wisc.hclust)
+```
+
+
+
+```{r}
+head(wisc.pr$x)
+```
+
+##COmbining Methods
+
+```{r}
+d <- dist(wisc.pr$x[,1:4])
+wisc.pr.hclust <- hclust(d, method="ward.D2")
+plot(wisc.pr.hclust)
+abline(h=70, col="red")
+```
+
+
+```{r}
+grps <- cutree(wisc.pr.hclust, h=70)
+table(grps)
+```
+
+How does this clustering `grps` correspond to the expert `diagnosis`?
+
+```{r}
+table(diagnosis)
+```
+
+```{r}
+table(diagnosis, grps)
+```
+
+
+
+
+
+
+
+
+
+
