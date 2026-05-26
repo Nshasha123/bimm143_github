@@ -8,7 +8,7 @@ Class 4: [introduction to R](Class04/class04.pdf)
 
 Class 5: [Data viz with ggplot2](class05/class05.md)
 
-Class 7: [Introduction to machine learning for Bioinformatics 1](Class07/untitled.qmd)
+Class 7: [Introduction to machine learning for Bioinformatics 1](Class07/Class07.qmd)
 
 Class 8: [Project: Unsupervised learning mini-project](class08/lab08.md)
 
