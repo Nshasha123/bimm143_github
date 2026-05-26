@@ -27,4 +27,3 @@ Class 14: [Project: RNA-Seq mini project](class14/lab14.pdf)
 
 
 
-
