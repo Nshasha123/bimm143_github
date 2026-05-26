@@ -4,7 +4,7 @@ My classwork from [BIMM 143 at UC San Diego Spring 2026](https://bioboot.github.
 
 ## Index of Classes 
 
-Class 4: [introduction to R]()
+Class 4: [introduction to R](class04/class04.pdf)
 
 Class 5: [Data viz with ggplot2]()
 
