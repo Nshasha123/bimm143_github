@@ -8,7 +8,7 @@ Class 4: [introduction to R](Class04/class04.pdf)
 
 Class 5: [Data viz with ggplot2](class05/class05.md)
 
-Class 6: [R functions and R packages from CRAN and BioConductor](class06/class06.md)
+Class 6: [R functions and R packages from CRAN and BioConductor](class06/lab06.md)
 
 Class 7: [Introduction to machine learning for Bioinformatics 1](Class07/Untitled.md)
 
